@@ -30,10 +30,6 @@ export default function Home() {
               into your private AI.
             </span>
           </h1>
-          <p className="text-base text-muted-foreground leading-relaxed">
-            A capable AI assistant that runs entirely inside your browser — powered
-            by WebGPU. Private by design. Works offline after the first load.
-          </p>
         </div>
 
         {/* Feature list */}
