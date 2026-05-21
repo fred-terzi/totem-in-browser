@@ -121,7 +121,7 @@ const SUGGESTIONS = [
   "What is Totem?",
   "What is a Perpetual Prompt?",
   "What is the Totem Builder?",
-  "Tell me about the Totem Roadmap."
+  "How do I modify the AI's responses?"
 ];
 
 const ThreadSuggestions: FC = () => {

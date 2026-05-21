@@ -61,6 +61,12 @@
       "answer": "To run AI inference locally in your browser, the model weights need to be present on your device. The download happens once and is then cached by your browser — subsequent loads are instant. The default model is around 500MB–2GB depending on which model is selected. You can see download progress on the loading screen."
     },
     {
+      "id": "modify-responses",
+      "question": "How do I modify the AI's responses?",
+      "keywords": ["modify", "responses", "behaviour", "behavior", "customize", "control", "change", "adjust", "instructions", "tone", "style", "personality"],
+      "answer": "You can shape Totem's behavior through two built-in tools. The Perpetual Prompt lets you write standing instructions that are silently prepended to every conversation — for example, 'Always respond in bullet points', 'My name is Alex', or 'Keep responses concise.' These instructions persist across all threads and take effect on your next message. Open it with the Perpetual Prompt button in the top bar. The Totem Builder lets you add your own knowledge entries — facts, notes, or context — that Totem automatically searches and injects when answering related questions. Together they give you precise control over both the AI's tone and what it knows."
+    },
+    {
       "id": "totem-roadmap",
       "question": "Tell me about the Totem Roadmap.",
       "keywords": ["roadmap", "future", "planned", "features", "coming", "next", "development", "tasks", "heartbeat", "mcp", "cloud"],
