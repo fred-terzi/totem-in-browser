@@ -28,7 +28,19 @@ jobs:
       - run: npm ci
 
       # Set BASE_PATH to the repo name so Next.js generates correct asset URLs.
-      # If you add a custom domain via CNAME, remove the BASE_PATH line below.
+      # If you add a custom domain via CNAME, remove the BASE_PATH line below
+      # and the manifest patch step.
+      - name: Patch manifest.json for base path
+        run: |
+          BASE="/${{ github.event.repository.name }}"
+          node -e "
+            const fs = require('fs');
+            const m = JSON.parse(fs.readFileSync('public/manifest.json','utf8'));
+            m.start_url = '$BASE/';
+            m.icons = m.icons.map(i => ({ ...i, src: '$BASE' + i.src }));
+            fs.writeFileSync('public/manifest.json', JSON.stringify(m, null, 2));
+          "
+
       - name: Build
         run: npm run build
         env:
