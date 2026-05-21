@@ -13,7 +13,7 @@ import { getWebLLMEngine } from "../webllm-engine";
 import { plainTextFromMessage, buildWebLLMMessages } from "./messages";
 import type { WebLLMRequestMessage } from "./types";
 
-const FAQ_TOOL_NAME = "search_faq";
+const FAQ_TOOL_NAME = "search_totem";
 
 function lastUserText(messages: UIMessage[]): string {
   for (let i = messages.length - 1; i >= 0; i--) {
