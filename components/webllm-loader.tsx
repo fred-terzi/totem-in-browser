@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { hasModelInCache, prebuiltAppConfig } from "@mlc-ai/web-llm";
 import { getWebLLMEngine, getWebLLMModelId, resetWebLLMEngine } from "@/lib/webllm-engine";
 import { loadFaqData } from "@/lib/faq-matcher";
@@ -208,6 +208,13 @@ export function WebLLMLoader({
 }: {
   children: React.ReactNode;
 }) {
+  const isMobile = useMemo(() => {
+    if (typeof navigator === "undefined") return false;
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile/i.test(
+      navigator.userAgent,
+    );
+  }, []);
+
   const [phase, setPhase] = useState<LoadPhase>({ type: "checking" });
   const [selectedModel, setSelectedModel] = useState<string>(() =>
     getWebLLMModelId(),
@@ -311,6 +318,38 @@ export function WebLLMLoader({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase.type]);
+
+  if (isMobile) {
+    return (
+      <div className="flex h-dvh w-full items-center justify-center bg-background">
+        <div className="flex max-w-md w-full flex-col items-center gap-4 rounded-2xl border bg-card p-8 shadow-sm text-center">
+          <div className="flex flex-col gap-1">
+            <h1 className="text-2xl font-semibold tracking-tight">
+              Mobile not supported
+            </h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              WebLLM requires WebGPU, which is not available on mobile browsers.
+              This experience is designed for desktop.
+            </p>
+            <p className="text-sm text-muted-foreground mt-2">
+              Stay tuned for{" "}
+              <span className="font-medium text-foreground">Totem Desktop</span>
+              {" — "}follow{" "}
+              <a
+                href="https://t.me/OfficialTotemToken"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline text-primary"
+              >
+                our Telegram
+              </a>{" "}
+              for updates.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (phase.type === "done") {
     return <>{children}</>;
