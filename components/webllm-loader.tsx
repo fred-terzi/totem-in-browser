@@ -122,39 +122,7 @@ function assessHardware(
     };
   }
 
-  // 4. GPU memory vs model requirement (conservative)
-  if (vramRequired !== undefined) {
-    if (gpu.maxBufferMB !== undefined) {
-      // maxBufferSize is the largest single GPU buffer allocation the driver
-      // allows. We use it as a conservative lower-bound VRAM proxy.
-      if (vramRequired > gpu.maxBufferMB) {
-        return {
-          severity: "warning",
-          headline: "GPU memory likely insufficient",
-          detail: `The model requires ~${Math.round(vramRequired).toLocaleString()} MB but the GPU reports a maximum buffer size of ${Math.round(gpu.maxBufferMB).toLocaleString()} MB. The model will very likely fail to load.`,
-        };
-      }
-      // Conservative threshold: flag anything using more than 60 % of the
-      // reported max buffer — leaves headroom for OS + other processes.
-      if (vramRequired > gpu.maxBufferMB * 0.6) {
-        return {
-          severity: "caution",
-          headline: "GPU memory is tight",
-          detail: `The model requires ~${Math.round(vramRequired).toLocaleString()} MB, which is a large portion of the GPU's estimated ${Math.round(gpu.maxBufferMB).toLocaleString()} MB capacity. It may work but could be slow or unstable.`,
-        };
-      }
-    } else {
-      // WebGPU present but adapter gave no buffer-size limit — unknown capacity.
-      return {
-        severity: "caution",
-        headline: "GPU memory capacity unknown",
-        detail:
-          "Could not determine GPU memory capacity. The model may fail to load if GPU memory is insufficient.",
-      };
-    }
-  }
-
-  // 5. Low system RAM warning for larger models
+  // 4. Low system RAM warning for larger models
   if (
     gpu.systemMemoryGB !== undefined &&
     gpu.systemMemoryGB < 8 &&
