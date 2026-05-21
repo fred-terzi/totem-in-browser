@@ -18,7 +18,6 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Totem",
   description: "Transform your computer into your private AI",
-  manifest: "/manifest.json",
 };
 
 export const viewport: Viewport = {
@@ -33,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
-        <link rel="manifest" href="/manifest.json" />
+        <link rel="manifest" href={`${basePath}/manifest.json`} />
         <meta name="apple-mobile-web-app-capable" content="yes" />
       </head>
       <body
