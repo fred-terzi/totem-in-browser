@@ -88,3 +88,17 @@ export async function resetWebLLMEngine(): Promise<void> {
   }
   progressListeners.clear();
 }
+
+/**
+ * Delete cached model weights from the browser's Cache Storage to free up
+ * disk space. Also tears down the active engine so the model will be
+ * re-downloaded on next use.
+ */
+export async function clearWebLLMCache(): Promise<void> {
+  await resetWebLLMEngine();
+
+  if (typeof caches === "undefined") return;
+
+  const keys = await caches.keys();
+  await Promise.all(keys.map((key) => caches.delete(key)));
+}
