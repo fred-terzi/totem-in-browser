@@ -218,8 +218,13 @@ export class WebLLMChatTransport<UI_MESSAGE extends UIMessage = UIMessage>
           controller.close();
         } catch (error) {
           if (aborted) return;
-          const message =
+          const rawMessage =
             error instanceof Error ? error.message : "WebLLM request failed.";
+          const message =
+            rawMessage +
+            "\n\nYour browser or computer may not be able to handle this model. " +
+            "However, your computer may still be suitable for Totem Desktop. " +
+            "Follow our Telegram for updates: https://t.me/OfficialTotemToken";
           controller.enqueue({ type: "error", errorText: message });
           controller.enqueue({ type: "finish-step" });
           controller.enqueue({ type: "finish" });
