@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/sidebar";
 import { ThreadListSidebar } from "@/components/assistant-ui/threadlist-sidebar";
 import { Separator } from "@/components/ui/separator";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { FaqBuilder } from "@/components/faq-builder";
 import { PerpetualPrompt } from "@/components/perpetual-prompt";
@@ -39,13 +40,11 @@ const ChatShell = () => {
               <SidebarTrigger />
               <Separator orientation="vertical" className="mr-2 h-4" />
               <Button variant="outline" size="sm" disabled>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/icons/X-Logo.jpg" alt="X" width={16} height={16} className="rounded-sm" />
+                <Image src="/icons/X-Logo.jpg" alt="X" width={16} height={16} className="rounded-sm" />
                 In Dev
               </Button>
               <Button variant="outline" size="sm" disabled>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/icons/telegram_PNG31.png" alt="Telegram" width={16} height={16} />
+                <Image src="/icons/telegram_PNG31.png" alt="Telegram" width={16} height={16} />
                 In Dev
               </Button>
               <div className="flex-1" />
