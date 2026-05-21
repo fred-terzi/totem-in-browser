@@ -1,8 +1,11 @@
-import type * as React from "react";
-import { MessagesSquare } from "lucide-react";
+"use client";
+
+import * as React from "react";
+import { MessagesSquare, Trash2 } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
@@ -10,10 +13,22 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { ThreadList } from "@/components/assistant-ui/thread-list";
+import { clearWebLLMCache } from "@/lib/webllm-engine";
 
 export function ThreadListSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
+  const [clearing, setClearing] = React.useState(false);
+
+  async function handleUncache() {
+    setClearing(true);
+    try {
+      await clearWebLLMCache();
+    } finally {
+      setClearing(false);
+    }
+  }
+
   return (
     <Sidebar {...props}>
       <SidebarHeader className="aui-sidebar-header mb-2 border-b">
@@ -37,6 +52,20 @@ export function ThreadListSidebar({
       <SidebarContent className="aui-sidebar-content px-2">
         <ThreadList />
       </SidebarContent>
+      <SidebarFooter className="border-t p-2">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={handleUncache}
+              disabled={clearing}
+              className="text-muted-foreground hover:text-destructive"
+            >
+              <Trash2 className="size-4" />
+              <span>{clearing ? "Clearing…" : "Uncache model"}</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );
