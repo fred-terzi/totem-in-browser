@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -9,8 +8,9 @@ export default function Home() {
 
         {/* Logo */}
         <div className="flex flex-col items-center gap-4">
-          <Image
-            src="/icons/totem_logo.png"
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/icons/totem_logo.png`}
             alt="Totem logo"
             width={128}
             height={128}

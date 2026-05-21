@@ -33,6 +33,7 @@ jobs:
         run: npm run build
         env:
           BASE_PATH: /${{ github.event.repository.name }}
+          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
 
       # GitHub Pages needs a .nojekyll file or it will strip _next/ directories.
       - run: touch out/.nojekyll

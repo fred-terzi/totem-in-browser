@@ -9,7 +9,6 @@ const nextConfig: NextConfig = {
   output: "export",
   basePath,
   assetPrefix: basePath,
-  images: { unoptimized: true },
   // NOTE: headers() is ignored in static export mode — HTTP security headers
   // (CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy)
   // MUST be set at the hosting layer (Cloudflare, Vercel, nginx, etc.).
