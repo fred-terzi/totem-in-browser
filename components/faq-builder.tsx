@@ -23,6 +23,7 @@ import {
   getFaqData,
   setFaqData,
   resetFaqData,
+  loadFaqData,
 } from "@/lib/faq-matcher";
 import type { FaqEntry, FaqData } from "@/lib/faq-matcher";
 
@@ -215,13 +216,14 @@ export function FaqBuilder({ open, onOpenChange }: FaqBuilderProps) {
 
   // Sync entries from in-memory FAQ data when dialog opens
   useEffect(() => {
-    if (open) {
+    if (!open) return;
+    loadFaqData().then(() => {
       setEntries(getFaqData()?.faq ?? []);
       setEditingId(null);
       setIsAdding(false);
       setDeleteConfirmId(null);
       setDraft({});
-    }
+    });
   }, [open]);
 
   const persist = useCallback(

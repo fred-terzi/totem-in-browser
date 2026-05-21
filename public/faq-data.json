@@ -59,12 +59,19 @@
       "question": "Why does Totem need to download a model?",
       "keywords": ["download", "model", "size", "large", "why", "first", "time", "weights"],
       "answer": "To run AI inference locally in your browser, the model weights need to be present on your device. The download happens once and is then cached by your browser — subsequent loads are instant. The default model is around 500MB–2GB depending on which model is selected. You can see download progress on the loading screen."
+    },
+    {
+      "id": "totem-roadmap",
+      "question": "Tell me about the Totem Roadmap.",
+      "keywords": ["roadmap", "future", "planned", "features", "coming", "next", "development", "tasks", "heartbeat", "mcp", "cloud"],
+      "answer": "Totem's roadmap focuses on expanding the agent's capabilities while preserving its core privacy-first, browser-native design. Planned features include: Task Management — ask the agent to track and remind you of tasks, all persisted in your browser; Cloud Model Fallback — for devices without WebGPU support, connect via OpenRouter to use a cloud model instead; Heartbeat (Scheduled Prompts) — create prompts that run automatically on a schedule, with results appearing in a dedicated thread; and MCP Integration — connect to external Model Context Protocol servers to give the agent access to additional tools and data sources. All features will maintain the same zero-install, browser-first, privacy-preserving design."
     }
   ],
   "followUpTopics": [
     "What is Totem?",
     "What is a Perpetual Prompt?",
     "What is the Totem Builder?",
+    "Tell me about the Totem Roadmap.",
     "Is my data private?",
     "Does Totem work offline?",
     "What browser does Totem require?"
