@@ -35,9 +35,17 @@ import {
   SaveIcon,
   SquareIcon,
 } from "lucide-react";
-import { type FC, useCallback, useRef, useState } from "react";
+import { type FC, useCallback, useEffect, useRef, useState } from "react";
+import { subscribeToFirstInference } from "@/lib/webllm-engine";
 
 export const Thread: FC = () => {
+  const [showFirstPromptBanner, setShowFirstPromptBanner] = useState(false);
+
+  useEffect(() => {
+    return subscribeToFirstInference((state) => {
+      setShowFirstPromptBanner(state === "running");
+    });
+  }, []);
   return (
     <ThreadPrimitive.Root
       className="aui-root aui-thread-root @container flex h-full flex-col bg-background"
@@ -68,6 +76,11 @@ export const Thread: FC = () => {
 
           <ThreadPrimitive.ViewportFooter className="aui-thread-viewport-footer sticky bottom-0 mt-auto flex flex-col gap-4 overflow-visible rounded-t-(--composer-radius) bg-background pb-4 md:pb-6">
             <ThreadScrollToBottom />
+            {showFirstPromptBanner && (
+              <div className="mx-auto w-full max-w-(--thread-max-width) rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-center text-sm text-amber-800 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-300">
+                First prompt loading — further responses will be faster
+              </div>
+            )}
             <Composer />
           </ThreadPrimitive.ViewportFooter>
         </div>

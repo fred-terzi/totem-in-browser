@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { hasModelInCache, prebuiltAppConfig } from "@mlc-ai/web-llm";
-import { getWebLLMEngine, getWebLLMModelId, resetWebLLMEngine } from "@/lib/webllm-engine";
+import { getWebLLMEngine, getWebLLMModelId, resetWebLLMEngine, warmupWebLLMEngine } from "@/lib/webllm-engine";
 import { loadFaqData } from "@/lib/faq-matcher";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -267,15 +267,15 @@ export function WebLLMLoader({
       setPhase({
         type: "loading",
         progress: report.progress,
-        text: report.text,
+        text: report.progress >= 1 ? "Warming up first inference…" : report.text,
       });
-      if (report.progress >= 1) {
-        setPhase({ type: "done" });
-      }
+      // Do NOT set "done" here — warmup must run first (see .then below).
     }, modelId)
-      .then(() => {
-        // Safety net: getWebLLMEngine now flushes any stale listeners itself,
-        // but this ensures we always reach "done" even in unexpected edge cases.
+      .then(async () => {
+        // Run a silent 1-token completion to pre-compile WebGPU shaders so
+        // the first real user message is noticeably faster.
+        setPhase({ type: "loading", progress: 1, text: "Warming up first inference…" });
+        await warmupWebLLMEngine();
         setPhase({ type: "done" });
       })
       .catch((err: unknown) => {
