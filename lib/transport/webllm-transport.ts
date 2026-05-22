@@ -9,7 +9,7 @@
 import type { ChatTransport, UIMessage, UIMessageChunk } from "ai";
 import { loadFaqData, matchFaq } from "../faq-matcher";
 import { getSystemPrompt } from "../system-prompt";
-import { getWebLLMEngine } from "../webllm-engine";
+import { getWebLLMEngine, notifyFirstInferenceRunning, notifyFirstInferenceDone } from "../webllm-engine";
 import { plainTextFromMessage, buildWebLLMMessages } from "./messages";
 import type { WebLLMRequestMessage } from "./types";
 
@@ -160,6 +160,10 @@ export class WebLLMChatTransport<UI_MESSAGE extends UIMessage = UIMessage>
           const textId = "text-1";
           let opened = false;
 
+          // Signal that the first real user inference is now in flight.
+          // This shows the "first prompt loading" banner in the UI.
+          notifyFirstInferenceRunning();
+
           const stream = await engine.chat.completions.create({
             messages: requestMessages,
             stream: true,
@@ -230,6 +234,7 @@ export class WebLLMChatTransport<UI_MESSAGE extends UIMessage = UIMessage>
           controller.enqueue({ type: "finish" });
           controller.close();
         } finally {
+          notifyFirstInferenceDone();
           abortSignal?.removeEventListener("abort", onAbort);
         }
       },

@@ -89,6 +89,62 @@ export async function resetWebLLMEngine(): Promise<void> {
   progressListeners.clear();
 }
 
+// ---------------------------------------------------------------------------
+// First-inference lifecycle pub/sub
+// Allows UI components to show a "first prompt loading" banner while the
+// initial (warm-up) inference is in flight, then dismiss it automatically.
+// ---------------------------------------------------------------------------
+type FirstInferenceState = "pending" | "running" | "done";
+let firstInferenceState: FirstInferenceState = "pending";
+const firstInferenceListeners = new Set<
+  (state: "running" | "done") => void
+>();
+
+export function subscribeToFirstInference(
+  cb: (state: "running" | "done") => void,
+): () => void {
+  firstInferenceListeners.add(cb);
+  // Replay current state to late subscribers
+  if (firstInferenceState !== "pending") cb(firstInferenceState as "running" | "done");
+  return () => firstInferenceListeners.delete(cb);
+}
+
+export function notifyFirstInferenceRunning(): void {
+  if (firstInferenceState !== "pending") return;
+  firstInferenceState = "running";
+  for (const cb of firstInferenceListeners) cb("running");
+}
+
+export function notifyFirstInferenceDone(): void {
+  if (firstInferenceState === "done") return;
+  firstInferenceState = "done";
+  for (const cb of firstInferenceListeners) cb("done");
+  firstInferenceListeners.clear();
+}
+
+/**
+ * Run a silent 1-token completion to pre-compile WebGPU shaders.
+ * Call this immediately after the engine loads so the first real user
+ * message does not pay the shader-compilation cost.
+ */
+export async function warmupWebLLMEngine(): Promise<void> {
+  try {
+    const engine = await getWebLLMEngine();
+    notifyFirstInferenceRunning();
+    const stream = await engine.chat.completions.create({
+      messages: [{ role: "user", content: "Hi" }],
+      max_tokens: 1,
+      stream: true,
+    });
+    // Drain the stream so shaders are fully compiled
+    for await (const _ of stream) { /* no-op */ }
+  } catch {
+    // Non-fatal — the first real message will just be a bit slower
+  } finally {
+    notifyFirstInferenceDone();
+  }
+}
+
 /**
  * Delete cached model weights from the browser's Cache Storage to free up
  * disk space. Also tears down the active engine so the model will be
