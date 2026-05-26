@@ -215,6 +215,7 @@ export function WebLLMLoader({
     );
   }, []);
 
+  const [mobileAcknowledged, setMobileAcknowledged] = useState(false);
   const [phase, setPhase] = useState<LoadPhase>({ type: "checking" });
   const [selectedModel, setSelectedModel] = useState<string>(() =>
     getWebLLMModelId(),
@@ -319,33 +320,32 @@ export function WebLLMLoader({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase.type]);
 
-  if (isMobile) {
+  if (isMobile && !mobileAcknowledged) {
     return (
       <div className="flex h-dvh w-full items-center justify-center bg-background">
         <div className="flex max-w-md w-full flex-col items-center gap-4 rounded-2xl border bg-card p-8 shadow-sm text-center">
           <div className="flex flex-col gap-1">
             <h1 className="text-2xl font-semibold tracking-tight">
-              Mobile not supported
+              Mobile support is limited
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
-              WebLLM requires WebGPU, which is not available on mobile browsers.
-              This experience is designed for desktop.
+              Running a local LLM on mobile requires a high-performance device.
+              Supported hardware includes the{" "}
+              <span className="font-medium text-foreground">iPhone 17</span>,
+              high-end Android flagships, and recent iPad Pro / iPad Air models.
             </p>
             <p className="text-sm text-muted-foreground mt-2">
-              Stay tuned for{" "}
-              <span className="font-medium text-foreground">Totem Desktop</span>
-              {" — "}follow{" "}
-              <a
-                href="https://t.me/OfficialTotemToken"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline text-primary"
-              >
-                our Telegram
-              </a>{" "}
-              for updates.
+              Older or mid-range devices may crash or fail to load the model.
+              For the best experience, use a desktop browser.
             </p>
           </div>
+          <Button
+            size="lg"
+            className="w-full"
+            onClick={() => setMobileAcknowledged(true)}
+          >
+            Continue anyway
+          </Button>
         </div>
       </div>
     );
