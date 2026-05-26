@@ -7,6 +7,6 @@
     "subtitle": "Your private AI — runs entirely in your browser",
     "accentColor": "#2563eb"
   },
-  "model": "Qwen3.5-0.8B-q4f32_1-MLC",
+  "model": "Qwen3.5-2B-q4f16_1-MLC",
   "noMatchMessage": "I don't have information about that yet. Here are some topics I can help with:"
 }

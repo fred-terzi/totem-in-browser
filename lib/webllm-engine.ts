@@ -9,7 +9,7 @@ import {
 // Tool/function calling is no longer required — RAG context is injected
 // automatically by the transport. Default to a small, fast general-purpose
 // model. Override with NEXT_PUBLIC_WEBLLM_MODEL or the in-app selector.
-const DEFAULT_WEBLLM_MODEL = "Qwen3.5-0.8B-q4f32_1-MLC";
+const DEFAULT_WEBLLM_MODEL = "Qwen3.5-2B-q4f16_1-MLC";
 
 let enginePromise: Promise<MLCEngineInterface> | null = null;
 let activeWorker: Worker | null = null;
