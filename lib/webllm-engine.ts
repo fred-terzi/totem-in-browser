@@ -49,13 +49,24 @@ export async function getWebLLMEngine(
   if (!enginePromise) {
     activeWorker = createWorker();
     activeModelId = targetModel;
-    enginePromise = CreateWebWorkerMLCEngine(activeWorker, targetModel, {
-      initProgressCallback: (report) => {
-        for (const cb of progressListeners) cb(report);
-        // Once fully loaded no further callbacks will fire, so clear the set.
-        if (report.progress >= 1) progressListeners.clear();
+    // Context window size: lower values (~2048–4096) reduce VRAM/RAM usage
+    // significantly. Override with NEXT_PUBLIC_WEBLLM_CONTEXT_WINDOW_SIZE.
+    const contextWindowSize = process.env.NEXT_PUBLIC_WEBLLM_CONTEXT_WINDOW_SIZE
+      ? parseInt(process.env.NEXT_PUBLIC_WEBLLM_CONTEXT_WINDOW_SIZE, 10)
+      : 2048;
+
+    enginePromise = CreateWebWorkerMLCEngine(
+      activeWorker,
+      targetModel,
+      {
+        initProgressCallback: (report) => {
+          for (const cb of progressListeners) cb(report);
+          // Once fully loaded no further callbacks will fire, so clear the set.
+          if (report.progress >= 1) progressListeners.clear();
+        },
       },
-    });
+      { context_window_size: contextWindowSize },
+    );
   }
 
   // Await the promise here so we can detect the case where the engine was
