@@ -17,31 +17,37 @@ export default function Home() {
             className="rounded-2xl shadow-sm"
           />
           <span className="text-sm font-semibold tracking-widest uppercase text-muted-foreground">
-            Totem Preview
+            Your Mind Leads
           </span>
         </div>
 
         {/* Hero */}
         <div className="flex flex-col gap-4">
           <h1 className="text-4xl font-bold tracking-tight leading-tight">
-            Transform your computer
+            Totem-LLM In-Browser Platform
             <br />
             <span className="text-muted-foreground font-medium">
-              into your private AI.
+              BETA
             </span>
           </h1>
         </div>
 
-        {/* Feature list */}
+        {/* Links */}
         <ul className="w-full flex flex-col gap-2.5 text-sm text-left">
           {[
-            "All inference happens on your device — nothing is sent to a server",
-            "Works offline once the model is downloaded",
-            "Designed to fit on consumer hardware",
+            { label: "Telegram:", url: "https://t.me/OfficialTotemToken" },
+            { label: "X:", url: "https://x.com/OFFTotemToken" },
           ].map((item) => (
-            <li key={item} className="flex items-start gap-2.5">
+            <li key={item.url} className="flex items-start gap-2.5">
               <span className="mt-px text-green-500 shrink-0" aria-hidden>✓</span>
-              <span className="text-muted-foreground">{item}</span>
+              <a
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:underline hover:text-foreground transition-colors"
+              >
+                {item.label} {item.url}
+              </a>
             </li>
           ))}
         </ul>
@@ -51,20 +57,10 @@ export default function Home() {
           <p className="text-sm font-medium text-foreground">
             Ready to get started?
           </p>
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            Before loading the assistant we&apos;ll check your browser&apos;s
-            WebGPU capabilities to make sure your hardware can handle it. This
-            check runs entirely on your device — no data is collected or
-            transmitted.
-          </p>
           <Button size="lg" className="w-full mt-1" asChild>
             <Link href="/chat">Evaluate my hardware &amp; get started</Link>
           </Button>
-          <p className="text-[11px] text-muted-foreground">
-            Requires a Chromium-based browser with hardware acceleration enabled
-          </p>
         </div>
-
       </div>
     </main>
   );
